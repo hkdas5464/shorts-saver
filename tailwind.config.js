@@ -4,7 +4,7 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@heroui/theme/dist/components/(button|input|navbar|select|tabs|ripple|spinner|form|listbox|divider|popover|scroll-shadow).js"
+    "./node_modules/@heroui/theme/dist/components/(button|image|input|navbar|select|spinner|tabs|ripple|form|listbox|divider|popover|scroll-shadow).js"
   ],
   theme: {  "purple-dark": {
     extend: "dark", // <- inherit default values from dark theme

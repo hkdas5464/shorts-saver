@@ -1,10 +1,10 @@
-// pages/index.js
 "use client";
 import { useState, useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
 import VideoModal from '../components/VideoModal';
 import CategoryTabs from '../components/CategoryTabs'; // (e.g., built using Headless UI Tabs as shown earlier)
 import { Button } from '@heroui/button';
+import { Spinner } from "@heroui/react";
 import { Input } from '@heroui/input';
 import { Select, SelectItem } from '@heroui/select';
 
@@ -71,6 +71,9 @@ export default function Home() {
   const [category, setCategory] = useState('Maths');
   const [subCategory, setSubCategory] = useState(subcategories['Maths'][0]);
   const [playingVideo, setPlayingVideo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [feedbackType, setFeedbackType] = useState(''); // "success" or "error"
 
   // Fetch videos from API using SWR
   const { data, error } = useSWR('/api/videos', fetcher, { refreshInterval: 5000 });
@@ -101,24 +104,37 @@ export default function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setFeedbackMessage('');
     const vidId = extractVideoId(videoLink);
     if (vidId) {
       const newVideo = { videoId: vidId, category, subCategory };
-      // Send a POST request to the API to save the video
-      const res = await fetch('/api/videos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newVideo)
-      });
-      if (res.ok) {
-        // Revalidate the SWR cache
-        mutate('/api/videos');
-        setVideoLink('');
-      } else {
-        alert('Failed to save video.');
+      try {
+        const res = await fetch('/api/videos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newVideo)
+        });
+        if (res.ok) {
+          // Revalidate the SWR cache
+          mutate('/api/videos');
+          setVideoLink('');
+          setFeedbackMessage("Video saved successfully!");
+          setFeedbackType("success");
+        } else {
+          setFeedbackMessage("Failed to save video.");
+          setFeedbackType("error");
+        }
+      } catch (err) {
+        setFeedbackMessage("Failed to save video.");
+        setFeedbackType("error");
+      } finally {
+        setLoading(false);
       }
     } else {
-      alert('Please enter a valid YouTube link.');
+      setFeedbackMessage("Please enter a valid YouTube link.");
+      setFeedbackType("error");
+      setLoading(false);
     }
   };
 
@@ -128,8 +144,8 @@ export default function Home() {
   if (error) return <p className="mt-8 text-center">Failed to load videos</p>;
 
   return (
-<div className="text-gray-900 bg-white dark:bg-gray-900 dark:text-gray-100">
-<h1 className="mb-6 text-3xl font-bold text-center">YouTube Video Saver</h1>
+    <div className="text-gray-900 bg-white dark:bg-gray-900 dark:text-gray-100">
+      <h1 className="mb-6 text-3xl font-bold text-center text-red-600">YouTube Video Saver</h1>
       
       {/* Video Submission Form */}
       <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-8">
@@ -145,7 +161,7 @@ export default function Home() {
           label="Select Subject"
           defaultSelectedKeys={["Maths"]}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full px-4 py-2 mb-4 "
+          className="w-full px-4 py-2 mb-4"
         >
           {Object.keys(subcategories).map((cat) => (
             <SelectItem key={cat} value={cat}>{cat}</SelectItem>
@@ -156,17 +172,24 @@ export default function Home() {
           onChange={(e) => setSubCategory(e.target.value)}
           className="w-full px-4 py-2 mb-4"
         >
-          {subcategories[category].map((sub, index) => (
-            <SelectItem key={index} value={sub}>{sub}</SelectItem>
+          {subcategories[category].map((sub) => (
+            <SelectItem key={sub} value={sub}>{sub}</SelectItem>
           ))}
         </Select>
         <Button
           type="submit"
           color='success'
-          className="w-full px-4 py-2 transition"
+          className="w-full transition"
+          disabled={loading}
         >
-          Save Video
+          {loading ? <Spinner  variant="spinner" />
+: "Save Video"}
         </Button>
+        {feedbackMessage && (
+          <p className={`mt-2 text-center ${feedbackType === "success" ? "text-green-500" : "text-red-500"}`}>
+            {feedbackMessage}
+          </p>
+        )}
       </form>
 
       {/* Use Headless UI Tabs for Category View */}
