@@ -39,7 +39,7 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="min-h-screen p-4 bg-gray-100">
+    <div className="min-h-screen p-4 ">
       <Link href="/">
         <span className="inline-block mb-4 text-blue-600 underline">← Home</span>
       </Link>
@@ -59,7 +59,7 @@ export default function CategoryPage() {
                 alt={`Video Thumbnail - ${video.subCategory}`}
                 className="w-full"
               />
-              <div className="p-2 bg-white">
+              <div className="p-2 ">
                 <p className="font-semibold capitalize">{video.subCategory || 'No subcategory'}</p>
               </div>
             </div>

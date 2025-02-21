@@ -16,11 +16,12 @@ export default function VideoModal({ playingVideo, setPlayingVideo }) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
+          {/* Dark semi-transparent overlay */}
           <div className="fixed inset-0 bg-black bg-opacity-50" />
         </Transition.Child>
-        
+
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-full p-4 text-center">
+          <div className="flex items-center justify-center min-h-full p-4 text-center sm:p-6">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -30,12 +31,15 @@ export default function VideoModal({ playingVideo, setPlayingVideo }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-4xl p-6 overflow-hidden text-left transition-all transform bg-white shadow-xl rounded-2xl">
+              <Dialog.Panel className="w-full max-w-lg p-4 mx-4 overflow-hidden text-left transition-all transform bg-white shadow-xl sm:max-w-4xl sm:p-6 dark:bg-gray-800 rounded-2xl">
                 <div className="flex items-center justify-between mb-4">
-                  <Dialog.Title as="h3" className="text-xl font-medium text-gray-900">
+                  <Dialog.Title as="h3" className="text-lg font-semibold text-gray-900 sm:text-xl dark:text-gray-100">
                     Play Video
                   </Dialog.Title>
-                  <button onClick={() => setPlayingVideo(null)} className="text-gray-500 hover:text-gray-700">
+                  <button
+                    onClick={() => setPlayingVideo(null)}
+                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                  >
                     <XMarkIcon className="w-6 h-6" />
                   </button>
                 </div>

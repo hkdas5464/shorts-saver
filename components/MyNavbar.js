@@ -12,7 +12,6 @@ import {
 } from '@heroui/navbar';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { ModeToggle } from './Toggle-theme';
 
 export default function MyNavbar() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,15 +29,23 @@ export default function MyNavbar() {
   return (
     <Navbar isBordered className="px-4 py-2">
       <NavbarBrand>
-        <h1 className="text-xl font-bold">My App</h1>
+        <h1 className="text-xl font-bold"></h1>
       </NavbarBrand>
-      <NavbarContent className="items-center justify-end">
-        <NavbarItem>
-          <form onSubmit={handleSearchSubmit} className="flex">
+      <NavbarContent justify="end">
+
+        
+                <NavbarItem justify="end" >
+          
+          <form onSubmit={handleSearchSubmit}  className="flex items-center gap-4">
             <Input
               type="text"
               placeholder="Search subcategory..."
               value={searchQuery}
+              classNames={{
+                inputWrapper: "bg-default-200",
+                sm:"w-full",
+                input: "text-sm",
+              }}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Button
@@ -49,16 +56,7 @@ export default function MyNavbar() {
           </form>
         </NavbarItem>
       </NavbarContent>
-      <ModeToggle/>
-      <NavbarMenuToggle />
-      <NavbarMenu>
-        <NavbarMenuItem>
-          <a href="/">Home</a>
-        </NavbarMenuItem>
-        <NavbarMenuItem>
-          <a href="/about">About</a>
-        </NavbarMenuItem>
-      </NavbarMenu>
+   
     </Navbar>
   );
 }

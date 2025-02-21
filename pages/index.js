@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
 import VideoModal from '../components/VideoModal';
 import CategoryTabs from '../components/CategoryTabs'; // (e.g., built using Headless UI Tabs as shown earlier)
+import { Button } from '@heroui/button';
+import { Input } from '@heroui/input';
+import { Select, SelectItem } from '@heroui/select';
 
 // Define subcategories mapping
 const subcategories = {
@@ -19,6 +22,7 @@ const subcategories = {
     "Time & Distance",
     "Simple & Compound Interest",
     "Average",
+    "Digital Sum",
     "Speed, Distance, and Time",
     "Mixtures & Allegations"
   ],
@@ -124,44 +128,45 @@ export default function Home() {
   if (error) return <p className="mt-8 text-center">Failed to load videos</p>;
 
   return (
-    <div className="min-h-screen p-4 bg-gray-100">
-      <h1 className="mb-6 text-3xl font-bold text-center">YouTube Video Saver</h1>
+<div className="text-gray-900 bg-white dark:bg-gray-900 dark:text-gray-100">
+<h1 className="mb-6 text-3xl font-bold text-center">YouTube Video Saver</h1>
       
       {/* Video Submission Form */}
       <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-8">
-        <input
+        <Input
           type="text"
           placeholder="Enter YouTube video link"
           value={videoLink}
           onChange={(e) => setVideoLink(e.target.value)}
-          className="w-full px-4 py-2 mb-4 border rounded"
+          className="w-full px-4 py-2 mb-4"
         />
-        <label className="block mb-1 font-semibold">Category:</label>
-        <select
+        <Select
           value={category}
+          label="Select Subject"
+          defaultSelectedKeys={["Maths"]}
           onChange={(e) => setCategory(e.target.value)}
-          className="w-full px-4 py-2 mb-4 border rounded"
+          className="w-full px-4 py-2 mb-4 "
         >
           {Object.keys(subcategories).map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
           ))}
-        </select>
-        <label className="block mb-1 font-semibold">Subcategory:</label>
-        <select
+        </Select>
+        <Select
           value={subCategory}
           onChange={(e) => setSubCategory(e.target.value)}
-          className="w-full px-4 py-2 mb-4 border rounded"
+          className="w-full px-4 py-2 mb-4"
         >
           {subcategories[category].map((sub, index) => (
-            <option key={index} value={sub}>{sub}</option>
+            <SelectItem key={index} value={sub}>{sub}</SelectItem>
           ))}
-        </select>
-        <button
+        </Select>
+        <Button
           type="submit"
-          className="w-full px-4 py-2 text-white transition bg-blue-600 rounded hover:bg-blue-700"
+          color='success'
+          className="w-full px-4 py-2 transition"
         >
           Save Video
-        </button>
+        </Button>
       </form>
 
       {/* Use Headless UI Tabs for Category View */}

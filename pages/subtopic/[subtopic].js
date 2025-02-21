@@ -28,7 +28,7 @@ export default function SubtopicPage({ videos, subtopic }) {
   const [playingVideo, setPlayingVideo] = useState(null);
 
   return (
-    <div className="min-h-screen p-4 bg-gray-100">
+    <div className="min-h-screen p-4 ">
       <Link href="/">
         <span className="inline-block mb-4 text-blue-600 underline">← Home</span>
       </Link>
@@ -50,7 +50,7 @@ export default function SubtopicPage({ videos, subtopic }) {
                 alt={`Video Thumbnail - ${video.subCategory}`}
                 className="w-full"
               />
-              <div className="p-2 bg-white">
+              <div className="p-2 ">
                 <p className="font-semibold capitalize">{video.subCategory || 'No subcategory'}</p>
                 <p className="text-sm text-gray-500 capitalize">{video.category || 'No category'}</p>
               </div>
